@@ -1,3 +1,5 @@
+
+
 function createCard(name, description, pictureUrl) {
     return `
       <div class="card">
