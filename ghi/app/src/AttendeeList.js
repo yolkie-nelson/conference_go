@@ -1,28 +1,41 @@
+import { useEffect, useState } from 'react';
 
+function AttendeesList() {
+  const [attendees, setAttendees] = useState([])
 
-function AttendeeList(props) {
-    return (
-        <div className="container">
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Conference</th>
+  const getData = async () => {
+    const response = await fetch('http://localhost:8001/api/attendees/');
+
+    if (response.ok) {
+      const data = await response.json();
+      setAttendees(data.attendees)
+    }
+  }
+
+  useEffect(()=>{
+    getData()
+  }, [])
+
+  return (
+    <table className="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Conference</th>
+        </tr>
+      </thead>
+      <tbody>
+        {attendees.map(attendee => {
+          return (
+            <tr key={attendee.href}>
+              <td>{ attendee.name }</td>
+              <td>{ attendee.conference }</td>
             </tr>
-          </thead>
-          <tbody>
-          {props.attendees && props.attendees.map(attendee => {
-            return (
-              <tr key={attendee.href}>
-                <td>{ attendee.name }</td>
-                <td>{ attendee.conference }</td>
-              </tr>
-            );
-          })}
-          </tbody>
-        </table>
-      </div>
-    )
+          );
+        })}
+      </tbody>
+    </table>
+  );
 }
 
-export default AttendeeList;
+export default AttendeesList;
